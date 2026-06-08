@@ -1,140 +1,95 @@
-# Mangue Score — Projeto BDD de QA (VA02 · P5)
+# Mangue Score
 
-Automacao de testes de interface (UI) no **Portal gov.br** — um site governamental
-publico — utilizando **Cypress + Cucumber + Gherkin** (BDD).
+Repositorio com dois projetos distintos:
+
+1. **Projeto BDD QA (VA02 · P5)** — Automacao de testes E2E no Portal gov.br com Cypress + Cucumber + Gherkin
+2. **MangueScore** — Classificador Musical Manguebeat em Python
+
+---
+
+## Projeto BDD QA — Cypress + Cucumber + Gherkin
+
+Automacao de testes de interface (UI) no **Portal gov.br** utilizando **Cypress 13 + Cucumber + Gherkin (BDD)**.
 
 > Disciplina: Qualidade de Software (QA) — Projeto VA02 / P5
-> Tema: Testes BDD em site governamental publico
 
----
-
-## Objetivo
-
-Garantir, de forma automatizada e legivel por qualquer pessoa (Gherkin em portugues),
-o funcionamento correto de cenarios essenciais do Portal gov.br:
-
-- Acesso e carregamento da pagina inicial;
-- Validacao dos elementos principais (menu, busca, secao de servicos);
-- Pesquisa por servicos publicos (cenario com dados / `Esquema do Cenario`);
-- Navegacao ate a pagina de servicos.
-
----
-
-## Tecnologias
+### Tecnologias
 
 | Ferramenta | Uso |
 |------------|-----|
 | [Cypress](https://www.cypress.io/) `13.x` | Execucao dos testes E2E/UI |
 | [@badeball/cypress-cucumber-preprocessor](https://github.com/badeball/cypress-cucumber-preprocessor) | Suporte a Cucumber/Gherkin no Cypress 13+ |
-| [@bahmutov/cypress-esbuild-preprocessor](https://github.com/bahmutov/cypress-esbuild-preprocessor) | Empacotamento dos steps com esbuild |
-| Gherkin (pt) | Escrita dos cenarios em linguagem natural |
+| Gherkin (pt) | Cenarios em linguagem natural |
 
----
-
-## Estrutura do projeto
+### Estrutura
 
 ```
-Mangue-score/
 ├── cypress/
 │   ├── e2e/
-│   │   ├── features/                 # Cenarios em Gherkin (.feature)
+│   │   ├── features/          # Cenarios em Gherkin
 │   │   │   ├── acessoPortal.feature
 │   │   │   ├── pesquisa.feature
 │   │   │   └── navegacaoServicos.feature
-│   │   └── steps/                    # Implementacao dos passos
-│   │       ├── acessoPortalSteps.js
-│   │       ├── pesquisaSteps.js
-│   │       └── navegacaoServicosSteps.js
-│   ├── fixtures/
-│   │   └── dados.json                # Massa de dados de apoio
-│   ├── pages/                        # Page Objects (boa pratica)
-│   │   ├── portal.page.js
-│   │   ├── pesquisa.page.js
-│   │   └── servicos.page.js
+│   │   └── steps/             # Implementacao dos passos
+│   ├── fixtures/dados.json
+│   ├── pages/                 # Page Objects
 │   └── support/
-│       ├── commands.js               # Comandos customizados (ex.: aceitarCookies)
-│       └── e2e.js
-├── cypress.config.js                 # Config do Cypress + plugin do Cucumber
-├── package.json
-└── README.md
+├── cypress.config.js
+└── package.json
 ```
 
----
+### Como executar os testes
 
-## Como executar
-
-### 1. Pre-requisitos
-- [Node.js](https://nodejs.org/) (versao LTS recomendada)
-- npm
-
-### 2. Instalar dependencias
 ```bash
 npm install
+npm run cypress:open    # modo interativo
+npm run cypress:run     # modo headless (gera video)
 ```
 
-### 3. Executar os testes
+### Cenarios (8 testes, todos verdes)
 
-**Modo interativo (abre a interface do Cypress):**
+- **acessoPortal**: carregar a home + validar menu, campo de busca e secao de servicos
+- **pesquisa**: busca valida + `Esquema do Cenario` (data-driven: Passaporte, CNH, CPF) + busca vazia
+- **navegacaoServicos**: acessar `/pt-br/servicos` e validar a URL e o titulo da pagina
+
+### Boas praticas aplicadas
+
+- **Page Objects**: seletores centralizados em `cypress/pages/`
+- **Gherkin em portugues** (`# language: pt`)
+- **Steps reutilizaveis** entre cenarios
+- **Fixtures** para massa de dados
+- **Comando customizado** `aceitarCookies` tolerante a ausencia do banner
+
+---
+
+## MangueScore — Classificador Musical
+
+Classificador que identifica o DNA Manguebeat em musicas e artistas.
+
+### Stack
+
+- Python 3.8+
+- pytest
+
+### Como rodar
+
 ```bash
-npm run cypress:open
+pip install -r requirements.txt
+python -m pytest -v
+python -m pytest --cov=src --cov-report=html
 ```
 
-**Modo headless (linha de comando, gera video):**
-```bash
-npm run cypress:run
+### Estrutura Python
+
+```
+src/
+├── models/musica.py
+└── services/manguescore_calculator.py
+tests/unit/
+├── test_musica.py
+└── test_manguescore_calculator.py
 ```
 
-**Executar um unico arquivo de feature:**
-```bash
-npx cypress run --spec "cypress/e2e/features/pesquisa.feature"
-```
-
-Os videos das execucoes ficam em `cypress/videos/` e os relatorios em
-`cypress/reports/` (HTML e JSON gerados pelo preprocessor do Cucumber).
-
 ---
-
-## Cenarios automatizados
-
-### `acessoPortal.feature` — Acesso ao Portal gov.br
-- Carregar a pagina inicial com sucesso;
-- Validar elementos principais (menu, busca, secao de servicos).
-
-### `pesquisa.feature` — Pesquisa de servicos
-- Pesquisar por um servico valido;
-- `Esquema do Cenario` (data-driven): Passaporte, CNH, CPF;
-- Submeter a busca sem informar um termo.
-
-### `navegacaoServicos.feature` — Navegacao
-- Acessar a pagina de servicos e validar a URL e o campo de busca.
-
----
-
-## Boas praticas aplicadas
-
-- **Page Objects**: seletores e acoes centralizados em `cypress/pages/`, reduzindo
-  duplicacao e facilitando manutencao.
-- **Gherkin em portugues** (`# language: pt`): cenarios legiveis para todo o time.
-- **Steps reutilizaveis**: passos compartilhados (ex.: acesso a home, campo de busca
-  visivel) definidos uma unica vez.
-- **Fixtures**: massa de dados separada em `cypress/fixtures/dados.json`.
-- **Comando customizado** `aceitarCookies` tolerante a ausencia do banner.
-- **Seletores resilientes** e `retries` configurados, dado que sites governamentais
-  podem variar layout/conteudo.
-
----
-
-## Observacao
-
-Sites governamentais sao ambientes reais e podem sofrer alteracoes de layout,
-indisponibilidade temporaria ou protecoes anti-bot. Os seletores foram escritos da
-forma mais resiliente possivel; caso o portal mude, ajuste os Page Objects em
-`cypress/pages/`.
-
----
-
-## Equipe
-
-Projeto desenvolvido para a disciplina de QA — VA02 / P5.
 
 Repositorio: https://github.com/jotavtech/Mangue-score
