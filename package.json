@@ -1,0 +1,42 @@
+{
+  "name": "mangue-score",
+  "version": "1.0.0",
+  "description": "Projeto BDD de QA (VA02 - P5): automacao de testes no Portal gov.br com Cypress + Cucumber + Gherkin",
+  "main": "index.js",
+  "scripts": {
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "test": "cypress run",
+    "test:headed": "cypress run --headed --browser chrome"
+  },
+  "keywords": [
+    "cypress",
+    "cucumber",
+    "gherkin",
+    "bdd",
+    "qa",
+    "automacao",
+    "govbr"
+  ],
+  "author": "Equipe Mangue Score",
+  "license": "ISC",
+  "devDependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^21.0.3",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.4",
+    "cypress": "^13.15.2",
+    "esbuild": "^0.24.2"
+  },
+  "cypress-cucumber-preprocessor": {
+    "stepDefinitions": [
+      "cypress/e2e/steps/**/*.{js,ts}"
+    ],
+    "html": {
+      "enabled": true,
+      "output": "cypress/reports/cucumber-report.html"
+    },
+    "json": {
+      "enabled": true,
+      "output": "cypress/reports/cucumber-report.json"
+    }
+  }
+}

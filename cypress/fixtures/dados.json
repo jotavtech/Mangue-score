@@ -1,0 +1,14 @@
+{
+  "portal": {
+    "url": "/",
+    "tituloEsperado": "gov.br",
+    "urlServicos": "/pt-br/servicos"
+  },
+  "termosBusca": [
+    "Imposto de Renda",
+    "Passaporte",
+    "CNH",
+    "CPF"
+  ],
+  "termoSemResultado": "xyzqwabc123naoexiste"
+}
